@@ -10,7 +10,7 @@
         <label>密碼</label>
         <input v-model="password" type="password" required>
       </div>
-      <button type="submit" :disabled="isLoading">登入</button>
+      <button type="submit" :disabled="isLoading">註冊</button>
     </form>
     <p v-if="errorMsg">{{ errorMsg }}</p>
   </div>
