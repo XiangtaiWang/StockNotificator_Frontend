@@ -31,7 +31,6 @@ const loadSettings = async () => {
     hasLoaded.value = true
   } catch (error) {
     showMessage('載入設定失敗', 'error')
-    console.error(error)
   } finally {
     isLoading.value = false
   }
@@ -146,7 +145,7 @@ const saveAllSettings = async () => {
     }
   } catch (error) {
     showMessage('保存設定時發生錯誤', 'error')
-    console.error(error)
+
   } finally {
     isLoading.value = false
   }

@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
 
 
 export const useAuthStore = defineStore("auth", () => {
@@ -13,10 +12,8 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     function logOut(){
-        const router = useRouter()
         token.value = null;
         localStorage.removeItem("jwt_token");
-        router.push('/login');
     }
 
     return {token, isAuthenticated, setToken, logOut}
