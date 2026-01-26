@@ -36,7 +36,6 @@ const loadSettings = async () => {
   }
 }
 
-// 新增設定
 const addSetting = () => {
   if (!newSetting.value.stockCode || !newSetting.value.intervalMinute) {
     showMessage('請填寫所有欄位', 'error')
@@ -67,7 +66,6 @@ const addSetting = () => {
   showMessage('設定已新增', 'success')
 }
 
-// 開始編輯
 const hasChanges = (index: number): boolean => {
   const setting = settings.value[index]!
   if (!setting.isEditing || !setting.originalData) {
@@ -98,7 +96,6 @@ const cancelEdit = (index: number) => {
 }
 }
 
-// 刪除設定
 const deleteSetting = (index: number) => {
   if (confirm('確定要刪除此設定嗎？')) {
     settings.value.splice(index, 1)
@@ -106,12 +103,10 @@ const deleteSetting = (index: number) => {
   }
 }
 
-// 保存所有設定到後端
 const saveAllSettings = async () => {
   try {
     isLoading.value = true
 
-    // 驗證所有設定
     for (const setting of settings.value) {
       if (!setting.stockCode || !setting.intervalMinute) {
         showMessage('請檢查所有欄位是否已填寫', 'error')
@@ -135,7 +130,6 @@ const saveAllSettings = async () => {
     
     if (response.status === 200) {
       showMessage('所有設定已成功保存', 'success')
-      // 清除編輯狀態
       settings.value.forEach(s => {
         s.isEditing = false
         s.originalData = undefined
@@ -151,7 +145,6 @@ const saveAllSettings = async () => {
   }
 }
 
-// 顯示訊息
 const showMessage = (msg: string, type: 'success' | 'error' | 'info') => {
   message.value = msg
   setTimeout(() => {
@@ -168,10 +161,7 @@ onMounted(() => {
   <div class="stock-notification-container">
     <h1>股票通知設定</h1>
 
-    <!-- 訊息提示 -->
-
-
-    <!-- 新增設定區塊 -->
+    <p>資訊來源為TWSE API系統更新時間五秒內的快照資料</p>
     <div class="add-setting-section">
       <h2>新增通知設定</h2>
       <form @submit.prevent="addSetting" class="form-group">
@@ -224,6 +214,7 @@ onMounted(() => {
               <th>股票代號</th>
               <th>通知間隔</th>
               <th>操作</th>
+              <th>刪除</th>
             </tr>
           </thead>
           <tbody>
@@ -262,7 +253,7 @@ onMounted(() => {
                   @click="settings[index]!.isEditing = false"
                   class="btn btn-primary"
                 >
-                  保存
+                  編輯完成
                 </button>
                 <button
                   v-if="setting.isEditing && !hasChanges(index)"
@@ -271,6 +262,9 @@ onMounted(() => {
                 >
                   取消
                 </button>
+     
+              </td>
+              <td>
                 <button @click="deleteSetting(index)" class="btn btn-danger">
                   刪除
                 </button>
@@ -279,7 +273,6 @@ onMounted(() => {
           </tbody>
         </table>
 
-        <!-- 手機版：卡片 -->
         <div class="settings-cards mobile-view">
           <div v-for="(setting, index) in settings" :key="index" class="setting-card">
             <div class="card-field">
@@ -338,7 +331,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- 保存所有設定按鈕 -->
     <div class="save-section">
       <button
         @click="saveAllSettings"
@@ -459,7 +451,6 @@ h2 {
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
 
-/* 按鈕樣式 */
 .btn {
   padding: 10px 16px;
   border: none;
@@ -514,7 +505,6 @@ h2 {
   background: #45a049;
 }
 
-/* 設定列表 */
 .setting-list-section {
   margin-bottom: 30px;
 }
@@ -535,7 +525,6 @@ h2 {
   border: 1px solid #e0e0e0;
 }
 
-/* 網頁版表格 */
 .settings-table {
   width: 100%;
   border-collapse: collapse;
@@ -573,7 +562,6 @@ h2 {
   font-size: 12px;
 }
 
-/* 編輯輸入框 */
 .edit-input,
 .edit-select {
   padding: 6px 10px;
@@ -589,7 +577,7 @@ h2 {
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
 
-/* 手機版卡片 */
+
 .settings-cards {
   display: none;
   flex-direction: column;
@@ -693,15 +681,3 @@ h2 {
   }
 }
 </style>
-
-<script lang="ts">
-function formatInterval(minutes: number): string {
-  if (minutes < 60) {
-    return `${minutes} 分鐘`
-  } else if (minutes === 60) {
-    return '1 小時'
-  } else {
-    return `${Math.round(minutes / 60)} 小時`
-  }
-}
-</script>
